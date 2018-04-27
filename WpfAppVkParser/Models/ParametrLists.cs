@@ -1,0 +1,59 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VkNet;
+using VkNet.Enums;
+using VkNet.Model.RequestParams.Database;
+
+namespace WpfAppVkParser.Models
+{
+    static class ParametrLists // відповідає за отримання списків з параметрами
+    {
+        private static readonly VkApi VkApi;
+        static ParametrLists()
+        {
+            VkApi = new VkApi();
+        }
+
+        public static async Task<Dictionary<long?,string>> GetListCountriesAsync() // повертає список країн та їч ID
+        {
+            Dictionary<long?,string> list = new Dictionary<long?,string>();
+            var templist = await VkApi.Database.GetCountriesAsync(true,null,1000);
+            foreach (var item in templist)
+            {
+                list.Add(item.Id, item.Title);
+            }
+            return list;
+        }
+
+        public static async Task<Dictionary<long?,string>> GetListCityAsync(int idCountry) // повертає список міст та їх Id
+        {
+            Dictionary<long?,string> list = new Dictionary<long?,string>();
+            GetCitiesParams getCitiesParams = new GetCitiesParams {CountryId = idCountry};
+            var templist =  await VkApi.Database.GetCitiesAsync(getCitiesParams);
+            foreach (var item in templist)
+            {
+                list.Add(item.Id, item.Title);
+            }
+            return list; 
+        }
+        public static async Task<List<string>> GetUniversityListAsync(int countryId, int cityId) // повертає список ВНЗ заданої країни та міста
+        {
+            List<string> list = new List<string>();
+            var templist = await VkApi.Database.GetUniversitiesAsync(countryId,cityId);
+            foreach (var item in templist)
+            {
+                list.Add(item.Name);
+            }
+            return list;
+        }
+
+        public static List<string> GetRelationList() // повертає сімейного стану
+        {
+            var type = typeof(RelationType);
+            var enumnames = type.GetEnumNames();
+            return enumnames.ToList();   
+        }
+
+    }
+}
