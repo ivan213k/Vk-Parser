@@ -7,7 +7,7 @@ using VkNet.Model.RequestParams.Database;
 
 namespace WpfAppVkParser.Models
 {
-    static class ParametrLists // відповідає за отримання списків з параметрами
+    static class ParametrLists //responsible for receiving lists with parameters
     {
         private static readonly VkApi VkApi;
         static ParametrLists()
@@ -15,9 +15,9 @@ namespace WpfAppVkParser.Models
             VkApi = new VkApi();
         }
 
-        public static async Task<Dictionary<long?,string>> GetListCountriesAsync() // повертає список країн та їч ID
+        public static async Task<Dictionary<long?,string>> GetListCountriesAsync()
         {
-            Dictionary<long?,string> list = new Dictionary<long?,string>();
+            var list = new Dictionary<long?,string>();
             var templist = await VkApi.Database.GetCountriesAsync(true,null,1000);
             foreach (var item in templist)
             {
@@ -26,9 +26,9 @@ namespace WpfAppVkParser.Models
             return list;
         }
 
-        public static async Task<Dictionary<long?,string>> GetListCityAsync(int idCountry) // повертає список міст та їх Id
+        public static async Task<Dictionary<long?,string>> GetListCityAsync(int idCountry) 
         {
-            Dictionary<long?,string> list = new Dictionary<long?,string>();
+            var list = new Dictionary<long?,string>();
             GetCitiesParams getCitiesParams = new GetCitiesParams {CountryId = idCountry};
             var templist =  await VkApi.Database.GetCitiesAsync(getCitiesParams);
             foreach (var item in templist)
@@ -37,9 +37,9 @@ namespace WpfAppVkParser.Models
             }
             return list; 
         }
-        public static async Task<List<string>> GetUniversityListAsync(int countryId, int cityId) // повертає список ВНЗ заданої країни та міста
+        public static async Task<List<string>> GetUniversityListAsync(int countryId, int cityId) 
         {
-            List<string> list = new List<string>();
+            var list = new List<string>();
             var templist = await VkApi.Database.GetUniversitiesAsync(countryId,cityId);
             foreach (var item in templist)
             {
@@ -48,7 +48,7 @@ namespace WpfAppVkParser.Models
             return list;
         }
 
-        public static List<string> GetRelationList() // повертає сімейного стану
+        public static List<string> GetRelationList() 
         {
             var type = typeof(RelationType);
             var enumnames = type.GetEnumNames();

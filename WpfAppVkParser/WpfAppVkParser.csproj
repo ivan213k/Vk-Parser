@@ -163,9 +163,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\settings.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\vk.png" />
   </ItemGroup>
   <ItemGroup>
