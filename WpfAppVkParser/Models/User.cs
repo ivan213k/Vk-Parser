@@ -1,6 +1,6 @@
 ﻿namespace WpfAppVkParser.Models
 {
-    public struct User // описує користувача
+    public struct User //describes the user
     {
         public string Id { get; set; }
 

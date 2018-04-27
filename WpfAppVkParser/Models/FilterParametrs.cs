@@ -2,7 +2,7 @@
 
 namespace WpfAppVkParser.Models
 {
-    struct FilterParametrs // параметр для фільтру
+    struct FilterParametrs // parameter for filter
     {
         public string Country { get; set; } 
         public string City { get; set; }

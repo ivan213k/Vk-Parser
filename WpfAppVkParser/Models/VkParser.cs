@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,7 +13,7 @@ using VkNet.Utils;
 
 namespace WpfAppVkParser.Models
 {
-    class VkParser: IParser  //відповідає за збір інформації про учасників спільнот
+    class VkParser: IParser  //responsible for parse information about community members
     {
         private readonly ulong appid = 6245860;
         private readonly VkApi vkapi;
@@ -45,7 +44,7 @@ namespace WpfAppVkParser.Models
                 OnNewData?.Invoke(value);
             }
         }
-        //Метод авторизації
+        //Authorization
         public async Task<bool> AuthorizeAsync(string login, string password, string captcha = null, long? sid= null) // метод авторизації
         {
             apiparams.ApplicationId = appid;
@@ -63,7 +62,7 @@ namespace WpfAppVkParser.Models
             if (vkapi.IsAuthorized) NewMessage?.Invoke(string.Format("[{0}:{1}:{2}] Авторизація пройшла успішно", DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second));
             return vkapi.IsAuthorized;
         }
-        bool IsDateInRange(DateTime leftdate, DateTime rightdate, string currentdate) // перевіряє чи належить дата проміжку в разі невдачі повертає false
+        bool IsDateInRange(DateTime leftdate, DateTime rightdate, string currentdate) // checks whether the date range is in place
         {
             try
             {
@@ -79,7 +78,7 @@ namespace WpfAppVkParser.Models
                 return false;
             }
         }
-        // метод початку роботи парсера
+        
         public async void StartParseAsync(string groupId, FilterParametrs filter, CancellationTokenSource tokenSource)
         {
             await Task.Run(() =>
@@ -238,7 +237,7 @@ namespace WpfAppVkParser.Models
 
                      }
 
-                     OnCompleted?.Invoke(); // повідомляєм підписників що робота завершена
+                     OnCompleted?.Invoke(); //  inform subscribers that the work  completed
                  }
                  catch (NullReferenceException)
                  {
@@ -259,7 +258,7 @@ namespace WpfAppVkParser.Models
 
         }
 
-        int GetIterationsCount() // отримати необхідну кількість звернень до сервера для доступу до всіх учасників(по 1000)
+        int GetIterationsCount() // get the required number of hits to the server to access all participants
         {
             int count = 0;
             foreach (var el in currentgroup)
@@ -275,7 +274,7 @@ namespace WpfAppVkParser.Models
             }
             return count;
         }
-        void ShowInformation()  // метод виведення інформації про спільноту
+        void ShowInformation()  // show information about group
         {
             foreach (var el in currentgroup)
             {

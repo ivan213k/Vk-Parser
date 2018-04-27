@@ -2,23 +2,17 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.Odbc;
-using System.Data.OleDb;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfAppVkParser.Models.ExelExport
 {
-    class ExcelExporterXML // відповідає за експорт даних в MS  Excel.
+    class ExcelExporterXML    //exporting to excel
     {
         public event ProgressChaneged ProgressChaneged;
         public event NewMessage OneNewMessage;
 
-        Cell ConstructCell(string value, CellValues dataType) // Повертає екземпляр клітинки Excel 
+        Cell ConstructCell(string value, CellValues dataType)
         {
             return new Cell()
             {
@@ -26,7 +20,7 @@ namespace WpfAppVkParser.Models.ExelExport
                 DataType = new EnumValue<CellValues>(dataType)
             };
         }
-        // Запис даних в файл MS Excel
+        // exporting to excel MS Excel
         public async void ExportToExcelAsync(ObservableCollection<User> list, string fileName)
         {
             await Task.Run(() =>
@@ -87,8 +81,7 @@ namespace WpfAppVkParser.Models.ExelExport
                         }
                         catch (Exception)
                         {
-
-                            // 
+                        // ignored
                         }
                         finally
                         {

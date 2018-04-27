@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Net.Http;
 using System.Threading;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using VkNet.Exception;
 using WpfAppVkParser.Models;
 using WpfAppVkParser.Models.ExelExport;
-using System.Threading;
-using System.Windows.Threading;
-using System.Diagnostics;
 
 namespace WpfAppVkParser.ViewModels
 {
@@ -37,8 +30,7 @@ namespace WpfAppVkParser.ViewModels
             excelExporter.ProgressChaneged += VkParser_ProgressChange;
             AuthorizeCommand = new Command(Authorize);
             StartParseCommand = new Command(StartParse);
-            Debug.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString() + "ctorr");
-            ExportToExelCommand = new Command(ExportToExel, CanExport);
+            ExportToExelCommand = new Command(ExportToExel);
             ClearTableCommand = new Command(CleareTable);
             SelectCountryCommand = new Command(SelectCoutry);
             SelectUniversityCommand = new Command(SelectUniversity);
@@ -47,21 +39,21 @@ namespace WpfAppVkParser.ViewModels
             BindingOperations.EnableCollectionSynchronization(list, new object());
 
         }
-        //повідмляє про зміну прогресу виконання операцій
+        //changes the progress of processes
         private void VkParser_ProgressChange(int curruntprogress, int maxvalue)
         {
             MaxValueProgress = maxvalue;
             CurrentProgress = curruntprogress;
         }
 
-        private void VkParser_OnCompleted()//повідомляє про завершення роботи
+        private void VkParser_OnCompleted()//handles shutdown parse
         {
             LogText = $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] Парсинг завершено";
             
             ExportToExelCommand.OneExecuteChaneged();
         }
 
-        private void VkParser_NewMessage(string message) //додає повідомлення в текстове поле
+        private void VkParser_NewMessage(string message) //adds a message to the log
         {
             LogText = message;
         }
@@ -224,7 +216,7 @@ namespace WpfAppVkParser.ViewModels
         public Command SelectUniversityCommand { get; }
         public Command StopParseCommand { get; }
 
-        //Метод авторизації
+        //Authorize
         async void Authorize(object parametr)
         {
             var Passwordbox = parametr as PasswordBox;
@@ -251,7 +243,7 @@ namespace WpfAppVkParser.ViewModels
                 IsDeterminate = false;
             }
         }
-        //починає роботу парсера
+        //start parse
         void StartParse(object parametr)
         {
 
@@ -265,7 +257,7 @@ namespace WpfAppVkParser.ViewModels
             }
         }
 
-        void ExportToExel(object parametr)//Метод експорту даних в MS Excel
+        void ExportToExel(object parametr)//export to MS Excel
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = @"Exel files (*.xlsx)|*.xlsx|All files (*.*)|*.*";
@@ -278,26 +270,26 @@ namespace WpfAppVkParser.ViewModels
             }
         }
 
-        void CleareTable(object parametr) // очищення таблиці
+        void CleareTable(object parametr) // clear table
         {
             List.Clear();
         }
-        async void SelectCoutry(object parametr) // завантаження списку з країнами
+        async void SelectCoutry(object parametr) // loading country list
         {
 
             ListCountry = await ParametrLists.GetListCountriesAsync();
 
         }
-        async void SelectCity(object parametr) // завантаження списку міст 
+        async void SelectCity(object parametr) // loading city list
         {
             ListCity = await ParametrLists.GetListCityAsync((int)selectedCountryId);
         }
-        async void SelectUniversity(object parametr) //завантаження списку ВНЗ
+        async void SelectUniversity(object parametr) //loading university list
         {
             ListUniversity = await ParametrLists.GetUniversityListAsync((int)selectedCountryId, (int)selectedCityId);
         }
 
-        void StopParse(object parametr) // зупиняє роботу парсера
+        void StopParse(object parametr) // stops parse
         {
             cancellationTokenSource.Cancel();
             CurrentProgress = 0;
@@ -305,13 +297,10 @@ namespace WpfAppVkParser.ViewModels
 
         #endregion
 
-        private void VkParser_OnNewData(User newdata) //додає дані в таблицю
+        private void VkParser_OnNewData(User newdata) //adds the data to the table
         {
             List.Add(newdata);
         }
-        private bool CanExport(object parametr)
-        {
-            return List.Count != 0;
-        }
+       
     }
 }

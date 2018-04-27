@@ -7,15 +7,15 @@ namespace WpfAppVkParser.ViewModels
 {
     class Command : ICommand
     {
-        public event EventHandler CanExecuteChanged; // подія що повідомляє інтерфейс про зміну умови можливості виконання команди
-        private readonly Action<object> execute; // делегат з яким буде зв'язаний метод виконання команди
+        public event EventHandler CanExecuteChanged; 
+        private readonly Action<object> execute; 
         private Func<object, bool> canExecute;
 
         public bool CanExecute(object parameter)
         {
             return this.canExecute == null || this.canExecute(parameter);
         }
-        public void OneExecuteChaneged() // метод виклику події CanExecuteChanged
+        public void OneExecuteChaneged() 
         {
             CanExecuteChanged?.Invoke(this, new EventArgs());
         }
