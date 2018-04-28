@@ -50,7 +50,6 @@ namespace WpfAppVkParser.ViewModels
         {
             LogText = $"[{DateTime.Now.Hour}:{DateTime.Now.Minute}:{DateTime.Now.Second}] Парсинг завершено";
             
-            ExportToExelCommand.OneExecuteChaneged();
         }
 
         private void VkParser_NewMessage(string message) //adds a message to the log

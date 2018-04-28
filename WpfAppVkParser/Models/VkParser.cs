@@ -32,6 +32,7 @@ namespace WpfAppVkParser.Models
             vkapi = new VkApi();
             @params = new GroupsGetMembersParams {Fields = UsersFields.All};
             apiparams = new ApiAuthParams();
+            vkapi.SetLanguage(VkNet.Enums.Language.Ua);
         }
 
         User user;
